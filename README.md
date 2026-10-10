@@ -1,157 +1,153 @@
-# InfraNexus AI
+InfraNexus AI
 
-> **“One Network. Zero Coordination Blind Spots.”**  
-> *Bits and Bytes 24-Hour Web Development Hackathon — IIITDM Kancheepuram*  
-> *Category: AI-Powered Municipal Infrastructure Coordination*  
-> *Track: CivicTech — Improving Transparency and Coordination in Public Works Projects*
+One Network. Zero Coordination Blind Spots.
 
----
+AI-Powered Municipal Infrastructure Coordination Platform
+Bits and Bytes 24-Hour Web Development Hackathon — IIITDM Kancheepuram
+Track: CivicTech
 
-## Overview
+About the Application
 
-**InfraNexus AI** is an AI-powered municipal infrastructure coordination platform that helps public agencies detect overlapping roadworks, coordinate departments, reduce repeat excavation, and make public works more transparent for citizens. When one department paves a road only for another agency to excavate it weeks later, taxpayer capital is wasted, vehicular transit is paralyzed, and public trust deteriorates.
+InfraNexus AI is an AI-powered civic technology platform designed to improve coordination between municipal departments working on roads, water supply, drainage, electricity, and telecommunications infrastructure.
 
-InfraNexus AI provides:
-1. **Public Infrastructure Intelligence Dashboard**: Transparent tracking of capital municipal projects, progress milestones, and active work zones.
-2. **Interactive Infrastructure Map**: Spatial mapping built with Leaflet and OpenStreetMap showing multi-agency work zones (Roads, Water, Drainage, Electricity, Telecom) and citizen report pins.
-3. **Deterministic Scheduling Conflict Engine**: Mathematical spatial proximity (Haversine distance) and temporal date overlap calculations that detect road collisions, dual-trenching risks, and premature paving hazards.
-4. **AI Coordination Assistant (Gemini API)**: Server-side intelligence synthesizing deconfliction plans, suggested staggered dates, joint trenching feasibility, traffic mitigation steps, and human-in-the-loop approval.
-5. **Citizen Reporting & Tracking**: Direct problem submission for road damage, open unbarricaded ditches, and repeated excavation with unique tracking IDs (e.g. `CS-2026-7842`) and status updates.
-6. **Department Workspace & Master Audit Logs**: Role-based action queues for municipal engineers, formal deconfliction accords, and immutable audit logs.
-7. **Empirical Analytics**: Mathematically derived KPIs reflecting real database records without hallucinated claims.
+When multiple departments independently schedule work on the same road, one agency may finish paving only for another to excavate the same corridor shortly afterward. This leads to repeated construction, wasted public expenditure, traffic disruption, and inconvenience for citizens.
 
----
+InfraNexus AI addresses this challenge through a unified infrastructure registry, interactive geospatial mapping, deterministic scheduling conflict detection, AI-assisted coordination, citizen grievance tracking, and data-driven analytics.
 
-## Tech Stack & Architecture
+The platform brings four perspectives into one connected system: citizens, infrastructure engineers, city administrators, and infrastructure analysts.
 
-- **Frontend**: React 19 + TypeScript + Vite
-- **Styling**: Tailwind CSS v4 (Clean light interface, deep navy typography, restrained teal accents, zero-pill metadata discipline)
-- **Mapping**: Leaflet + OpenStreetMap (custom vector divIcons with SVG pins, buffer radii circles, and conflict vectors)
-- **Backend**: Express server (`server.ts`) hosting secure proxy routes for Gemini API and serving Vite in development
-- **AI Integration**: `@google/genai` TypeScript SDK using `gemini-3.8-flash` on the server (never exposing keys to the browser)
-- **Database & RLS**: Supabase PostgreSQL schema (`supabase/migrations/01_civicsync_schema.sql`) with Row Level Security, composite indexes, and local persistent data layer
-- **Deployment**: Configured for Vercel and Node.js Cloud Run environments
+Four Role-Based Dashboards
 
----
+1. Public Citizen Dashboard — Transparency and Grievance Tracking
 
-## Getting Started
+Designed to help citizens understand nearby infrastructure activity and report local problems.
 
-### 1. Prerequisites
-- Node.js 20+
-- npm
+- Nearby Infrastructure Projects: Explore registered public works, project timelines, work locations, and available progress information.
+- Interactive Infrastructure Map: View mapped projects, work zones, and reported issues where geographic data is available.
+- Public Project Registry: Search and explore available infrastructure records.
+- Citizen Grievance Reporting: Submit reports about damaged roads, unsafe excavations, and repeated digging, with optional photographs and location details where supported.
+- My Reports & Tracking: Follow submitted complaints through their available status updates.
+- Privacy-Aware Access: Public views are intended to exclude private citizen information and internal departmental notes.
 
-### 2. Environment Variables
-Create a `.env` file in the root directory:
+Goal: Give citizens better visibility into infrastructure work and a clear way to report issues.
 
-```bash
-# Gemini API Key (accessed strictly on the server-side)
-GEMINI_API_KEY="YOUR_GEMINI_API_KEY"
+2. Highways Engineer Dashboard — Conflict Detection and Work Coordination
 
-# Optional: Supabase credentials for real cloud PostgreSQL persistence
-VITE_SUPABASE_URL="https://your-project.supabase.co"
-VITE_SUPABASE_ANON_KEY="your-anon-key"
+Designed for infrastructure engineers responsible for reviewing roadwork schedules and coordinating with utility departments.
 
-PORT=3000
-```
+- Assigned Infrastructure Projects: Review relevant road projects, progress, budgets, and execution schedules.
+- Corridor Conflict Center: Identify potential clashes between road resurfacing and nearby water, drainage, electricity, or telecommunications projects.
+- Spatial and Temporal Analysis: Evaluate geographic proximity and overlapping project dates using deterministic calculations.
+- Schedule Management: Review project timelines and proposed adjustments where the workflow is supported.
+- AI Coordination Assistant: Explore alternative work sequences, staggered schedules, potential joint-trenching opportunities, and traffic mitigation strategies.
+- Citizen Grievance Triage: Review relevant public reports and support their routing to the appropriate workflow.
 
-### 3. Installation & Development
+Goal: Help engineers identify potential conflicts earlier and make better-informed coordination decisions.
 
-```bash
-# Install dependencies
-npm install
+3. City Administrator Dashboard — City-Wide Oversight
 
-# Start full-stack development server (Express + Vite on port 3000)
-npm run dev
+Designed to provide administrators with a consolidated view of infrastructure activity across departments.
 
-# Run build verification
-npm run build
-```
+- Unified Project Registry: Review the overall portfolio of registered infrastructure projects.
+- Capital Expenditure Overview: Examine recorded project budgets and aggregate financial summaries.
+- Cross-Department Coordination: Review potential conflicts involving multiple infrastructure agencies.
+- Project and Department Monitoring: Compare project status, progress, and available departmental indicators.
+- AI Executive Brief: Generate concise summaries and coordination insights based on relevant available records.
+- Data Export: Export supported project information for reporting and further analysis.
+- Decision and Activity History: Inspect available coordination decisions and audit records.
 
----
+Goal: Support informed oversight, interdepartmental coordination, and accountable infrastructure planning.
 
-## Database Schema & Migrations
+4. Infrastructure Analytics Dashboard — Data-Driven Insights
 
-The full PostgreSQL migration file is located at:
-`supabase/migrations/01_civicsync_schema.sql`
+Designed to turn infrastructure records into understandable metrics and patterns.
 
-It provisions:
-- `profiles`: User accounts, RBAC roles (`citizen`, `dept_officer`, `city_admin`), and municipal departments.
-- `projects`: Municipal infrastructure works, coordinates, work zone radii, budgets, dates, and progress.
-- `project_updates`: Audit log of progress milestones and field notes.
-- `citizen_reports`: Public issue submissions with status lifecycle (`submitted` → `verified` → `scheduled_for_work` → `resolved`).
-- `project_conflicts`: Deterministic spatial & temporal collision vectors with severity classifications.
-- `coordination_decisions`: Formally signed inter-departmental scheduling accords.
-- `audit_logs`: Immutable ledger of municipal operations.
-- **Row Level Security (RLS)**: Enforces read access for citizens while restricting status transitions, conflict dismissals, and coordination decisions to authorized officers.
+- Conflict Analytics: Examine detected spatial and schedule conflicts.
+- Project Distribution: Explore projects by department, category, and status.
+- Budget Analysis: Review recorded project budgets and capital allocation summaries.
+- Citizen Grievance Analytics: Examine report counts, statuses, and resolution indicators when the underlying data is available.
+- Interactive Filters: Narrow results by relevant departments, categories, and project statuses.
+- Record-Level Drill-Down: Inspect supporting records behind available charts and metrics.
 
----
+Goal: Make infrastructure activity easier to evaluate using transparent, traceable data rather than unsupported claims.
 
-## Four Role-Based Dashboards
+AI-Powered Capabilities
 
-InfraNexus AI provides four distinct, tailored dashboard experiences using the same underlying unified registry:
+AI Coordination Assistant
 
-1. **Dashboard 1: Public Citizen (`/overview` with Public Citizen persona)**
-   - **Overview of Nearby Works**: Ward-level road closures, detours, and planned utility excavations.
-   - **Interactive Map**: Live spatial boundaries and disruption radii along transit corridors.
-   - **Public Project Registry**: Searchable index of public works, contractors, and timelines.
-   - **Grievance Submission**: File geotagged issues with optional photo attachment, generating reference IDs (e.g. `CS-2026-7842`).
-   - **"My Reports" 5-Stage Tracker**: Real-time progress updates (*Submitted* → *Geotag Verified* → *Sub-Division Assigned* → *Work Dispatched* → *Resolved*).
-   - **Privacy Protection**: Never displays other citizens' phone numbers, emails, or internal staff notes.
+The Gemini-powered assistant helps users interpret infrastructure information and explore possible coordination strategies.
 
-2. **Dashboard 2: Highways Engineer (`/overview` with Highways Engineer persona)**
-   - **Assigned Road Infrastructure**: State highways right-of-way contracts (`HW-2026-089`, `HW-2026-031`).
-   - **Corridor Conflict Center**: Highlights detected clashes with water pipelines and power ducts on GST Road (32 days overlap, 186m separation).
-   - **Schedule Update Workflow**: Adjust planned execution dates or record field progress milestones with engineering justifications.
-   - **AI Staging Assistant Link**: One-click launch to review Gemini-powered sequence reversal mitigations.
-   - **Citizen Grievance Triage**: Work order queue for road cold-patching and contractor back-charges.
+It can support tasks such as explaining detected conflicts, summarizing relevant project details, suggesting alternative schedules, and outlining possible mitigation measures.
 
-3. **Dashboard 3: City Administrator (`/overview` with City Admin persona)**
-   - **City-Wide Infrastructure Intelligence**: ₹2,080.5L total capital outlay across 7 registered projects.
-   - **Cross-Department Coordination Center**: Inter-agency authority over Highways, MetroWater, TNEB, Municipal Corp, and Telecom.
-   - **Department Administration**: Agency compliance benchmarks, active work allocations, and liaisons.
-   - **AI Executive Brief**: Grounded summary synthesized from live database records.
-   - **Exportable Reports**: One-click CSV and JSON exports for municipal audits.
+Intelligent Project Question Answering
 
-4. **Dashboard 4: Infrastructure Analytics (`Analytics` tab or Hub D4)**
-   - **4 Verified Core KPIs**:
-     - *Excavation Clashes Averted*: 1 (detected via Haversine < 200m + Date Overlap).
-     - *Capital Expenditure Protected*: ₹420.0 Lakhs (the value of the road surface spared from premature digging).
-     - *Average Resolution Time*: 4.2 Hours.
-     - *Citizen Grievance Resolution Rate*: 78% (7 total, 5 resolved, 2 in inspection).
-   - **Interactive Scope Filters**: Department, Category, and Status.
-   - **Record Drill-Down Inspector**: Click any chart or metric to view the actual underlying database records.
+Users can ask questions about infrastructure projects and coordination issues in natural language. Project-specific answers should be grounded in retrieved records when available, while general questions can be handled separately.
 
----
+Citizen Complaint Assistance
 
-## 2–5 Minute Evaluation & Demo Walkthrough
+AI can help categorize citizen-submitted issues and organize their descriptions. Citizens should be able to review the information before submission where that workflow is implemented.
 
-1. **Step 1: Public Citizen Experience**
-   - In the top *Hackathon Persona Switcher*, select **Public Citizen**.
-   - Notice the top bar adapts: *+ Report Issue* appears instead of *+ New Project*.
-   - Review *Active Road Closures* on GST Road and search the public projects registry.
-   - Click *My Reports & Tracking* to observe the 5-step remediation tracker for `CS-2026-7842`.
+Deterministic Conflict Detection
 
-2. **Step 2: Highways Engineer Experience**
-   - Switch to **Highways Engineer** (*Er. R. Senthil Kumar*).
-   - Observe the *Corridor Trenching Clash* alert on GST Road: Highways Bitumen Resurfacing (`HW-2026-089`) colliding with MetroWater Pipeline (`WS-2026-114`) by 32 days over a 186m stretch.
-   - Open *Map Explorer* to see the amber marker and glowing red conflict boundary.
+Spatial proximity and date-overlap calculations are handled through explicit application logic. AI recommendations complement these calculations rather than replacing them.
 
-3. **Step 3: AI Assistant & Schedule Optimization**
-   - Click *AI Assistant* in the top navigation.
-   - Click **Run Gemini Schedule Optimization**: Watch Gemini synthesize the civil mitigation brief recommending sequence reversal.
-   - Click **Authorize & Commit Re-sequencing to Master Registry**:
-     - Automatically updates `HW-2026-089` dates to start December 15.
-     - Decrements the pending conflict badge in the header from 2 to 1.
-     - Logs a signed cryptographic entry in the Audit Trail.
+Human-in-the-Loop Decisions
 
-4. **Step 4: City Administrator & Analytics Inspection**
-   - Switch to **City Admin (IAS)** (*Dr. Meenakshi Sundaram, IAS*).
-   - Review the city-wide capital outlay (₹2,080.5L) and department coordination scores.
-   - Download the Master Registry CSV or JSON export.
-   - Click *Analytics* (Dashboard 4) and click on **Excavation Clashes Averted** or **Project Distribution** to open the live **Record Drill-Down Inspector**!
+AI-generated recommendations are intended to assist decision-makers. Schedule changes and consequential coordination actions should require appropriate review and authorization.
+
+Interactive Infrastructure Map
+
+The mapping experience uses Leaflet and OpenStreetMap to present infrastructure projects geographically.
+
+It is designed to help users:
+
+- Explore work zones across different departments.
+- Understand the geographic relationship between nearby projects.
+- Visualize potential conflicts and reported issues.
+- Investigate the relationship between project locations and execution schedules.
+
+The accuracy of map-based analysis depends on the quality of the available project coordinates and work-zone information.
+
+Technology Stack
+
+- Frontend: React, TypeScript, Vite, and Tailwind CSS.
+- Mapping: Leaflet and OpenStreetMap.
+- Backend: Node.js and Express.
+- AI: Google Gemini API.
+- Database: Supabase and PostgreSQL.
+- Analysis: Haversine distance calculations and date-overlap rules.
+- Access Control: Database policies and role-based authorization where configured.
+
+Example Demonstration Scenario
+
+Consider a simulated road resurfacing project scheduled near a planned water pipeline replacement.
+
+1. The conflict engine checks the projects' geographic separation and scheduled dates.
+2. If the configured spatial and temporal rules are satisfied, the system flags a potential conflict.
+3. The engineer opens the conflict details and reviews the supporting project information.
+4. The AI Coordination Assistant proposes possible alternatives, such as changing the execution sequence or investigating joint trenching.
+5. An authorized decision-maker reviews the recommendation before any supported schedule change is committed.
+6. The administrator and analytics dashboards provide visibility into the relevant records and resulting changes.
+
+This scenario demonstrates how deterministic analysis and AI-assisted planning can work together to support more coordinated public works.
+
+Expected Impact
+
+InfraNexus AI aims to help public agencies:
+
+- Reduce avoidable repeat excavation through earlier conflict identification.
+- Improve coordination between infrastructure departments.
+- Make project information easier for citizens to discover.
+- Provide more structured citizen issue reporting and tracking.
+- Support transparent, data-informed planning decisions.
+- Improve visibility into project schedules, budgets, and coordination activity.
+
+Demonstration Data Disclosure
+
+The project uses simulated municipal infrastructure data inspired by urban corridors around Kancheepuram, Tambaram, and Chennai. Sample project identifiers, schedules, budgets, conflicts, and grievance records are for demonstration purposes and do not represent verified government records.
+
+Displayed metrics should be interpreted according to their underlying data and calculation rules. The platform is a hackathon prototype and is not an official municipal service.
 
 ---
 
-## Demonstration Data Disclosure
-
-All seeded projects in this demonstration represent **simulated municipal works** along the Kancheepuram, Tambaram, and Chennai urban transit corridors (e.g., GST Road, Vandalur-Kelambakkam link). They are designed for evaluating scheduling conflict algorithms and hackathon judging, and do not represent actual government records.
+InfraNexus AI — One Network. Zero Coordination Blind Spots.
