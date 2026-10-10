@@ -1,0 +1,6 @@
+{
+  "name": "InfraNexus AI",
+  "description": "One Network. Zero Coordination Blind Spots. AI-powered municipal infrastructure coordination platform that helps public agencies detect overlapping roadworks, coordinate departments, reduce repeat excavation, and make public works more transparent for citizens.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
