@@ -4,7 +4,7 @@ One Network. Zero Coordination Blind Spots.
 
 Live Demo: https://infra-nexus-ai.vercel.app/
 GitHub Repository: https://github.com/suresh31-ch/InfraNexus-AI
-live video:https://youtu.be/qedgLKucORc
+
 1. Problem Statement
 
 Municipal departments such as highways, water supply, drainage, and telecommunications often plan infrastructure projects independently. This can result in multiple departments working on the same road or location at different times without proper coordination.
